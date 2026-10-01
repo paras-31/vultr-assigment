@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars and adjust. Do not commit terraform.tfvars.
+# Authentication: export VULTR_API_KEY rather than putting it here.
+
+object_storage_region    = "ewr"
+object_storage_tier_slug = "tier_010k_5000m"
+object_storage_label     = "cnp-tfstate"
+state_bucket_name        = "cnp-terraform-state"
+enable_bucket_versioning = true
+
+project     = "cloud-native-platform"
+environment = "production"
+owner       = "devops-assignment"

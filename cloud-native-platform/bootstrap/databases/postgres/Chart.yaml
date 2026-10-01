@@ -1,0 +1,6 @@
+apiVersion: v2
+name: postgres
+description: Standalone PostgreSQL for the assignment (not HA)
+type: application
+version: 0.1.0
+appVersion: "16.6"

@@ -1,0 +1,21 @@
+# Copy to backend.hcl after bootstrap apply. Do not commit backend.hcl.
+#
+# Fill bucket and endpoints.s3 from:
+#   terraform -chdir=terraform/bootstrap output -raw state_bucket_name
+#   terraform -chdir=terraform/bootstrap output -raw object_storage_hostname
+#
+# Then:
+#   terraform -chdir=terraform/infrastructure init -backend-config=backend.hcl
+
+bucket                      = "cnp-terraform-state"
+key                         = "infrastructure/terraform.tfstate"
+region                      = "us-east-1"
+skip_credentials_validation = true
+skip_metadata_api_check     = true
+skip_region_validation      = true
+skip_requesting_account_id  = true
+use_path_style              = true
+
+endpoints = {
+  s3 = "https://REPLACE_WITH_S3_HOSTNAME"
+}

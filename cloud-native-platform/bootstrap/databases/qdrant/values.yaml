@@ -1,0 +1,20 @@
+image:
+  repository: qdrant/qdrant
+  tag: "v1.13.6"
+  pullPolicy: IfNotPresent
+
+auth:
+  existingSecret: qdrant-auth
+  apiKeyKey: api-key
+
+persistence:
+  size: 10Gi
+  storageClass: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 768Mi

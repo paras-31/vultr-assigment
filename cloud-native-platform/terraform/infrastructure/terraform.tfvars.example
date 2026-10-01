@@ -1,0 +1,29 @@
+# Copy to terraform.tfvars and adjust. Do not commit terraform.tfvars.
+# Authentication: export VULTR_API_KEY rather than putting it here.
+#
+# Confirm the Kubernetes version string before apply:
+#   curl -s https://api.vultr.com/v2/kubernetes/versions \
+#     -H "Authorization: Bearer $VULTR_API_KEY"
+#
+# Confirm the registry name is unused; it must be lowercase alphanumeric.
+
+region              = "ewr"
+kubernetes_version  = "v1.36.2+1"
+cluster_label       = "cnp-vke"
+ha_control_planes   = false
+enable_firewall     = true
+
+node_quantity = 3
+node_plan     = "vc2-4c-8gb"
+node_pool_label = "cnp-worker"
+
+enable_node_autoscaler = false
+autoscaler_min_nodes   = 3
+autoscaler_max_nodes   = 5
+
+registry_name = "cnpdemo"
+registry_plan = "start_up"
+
+project     = "cloud-native-platform"
+environment = "production"
+owner       = "devops-assignment"

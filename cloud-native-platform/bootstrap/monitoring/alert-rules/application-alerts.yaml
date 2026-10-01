@@ -1,0 +1,61 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cnp-application-alerts
+  namespace: monitoring
+  labels:
+    release: kps
+spec:
+  groups:
+    - name: cnp.backend
+      rules:
+        - alert: BackendHighErrorRate
+          expr: |
+            (
+              sum(rate(http_requests_total{job="backend",status=~"5.."}[5m]))
+              /
+              clamp_min(sum(rate(http_requests_total{job="backend"}[5m])), 0.001)
+            ) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Backend 5xx rate is above 5%
+            description: Error ratio is {{ $value | humanizePercentage }} for 5 minutes.
+
+        - alert: BackendHighLatency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum(rate(http_request_duration_seconds_bucket{job="backend"}[5m])) by (le)
+            ) > 0.5
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Backend P95 latency is above 500ms
+            description: P95 latency is {{ $value }} seconds.
+
+        - alert: PodCrashLooping
+          expr: |
+            increase(kube_pod_container_status_restarts_total{namespace=~"apps|databases"}[15m]) > 3
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping
+            description: Container {{ $labels.container }} restarted more than 3 times in 15 minutes.
+
+        - alert: PersistentVolumeAlmostFull
+          expr: |
+            (
+              kubelet_volume_stats_used_bytes
+              /
+              kubelet_volume_stats_capacity_bytes
+            ) > 0.85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: PVC {{ $labels.persistentvolumeclaim }} is more than 85% full
+            description: Namespace {{ $labels.namespace }}, value {{ $value | humanizePercentage }}.

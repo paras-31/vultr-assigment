@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+  labels:
+    project: cloud-native-platform
+    managed-by: terraform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gateway
+  labels:
+    project: cloud-native-platform
+    istio.io/dataplane-mode: ambient
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: databases
+  labels:
+    project: cloud-native-platform
+    # Databases stay out of the ambient mesh so PostgreSQL/Valkey/Qdrant
+    # wire protocols are not intercepted. Backend in apps still reaches them.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    project: cloud-native-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infisical-system
+  labels:
+    project: cloud-native-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+  labels:
+    project: cloud-native-platform
+    istio.io/dataplane-mode: ambient
+    # Do not set istio-injection=enabled. Ambient does not use sidecars.

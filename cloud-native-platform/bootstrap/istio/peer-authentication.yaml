@@ -1,0 +1,26 @@
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: apps
+spec:
+  mtls:
+    mode: STRICT
+---
+# Prometheus in the monitoring namespace is not in the mesh. Backend metrics
+# will listen on 8081 in Phase 2 so scrapes can stay PERMISSIVE while app
+# traffic on 8080 remains STRICT.
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: backend-metrics
+  namespace: apps
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  mtls:
+    mode: STRICT
+  portLevelMtls:
+    "8081":
+      mode: PERMISSIVE

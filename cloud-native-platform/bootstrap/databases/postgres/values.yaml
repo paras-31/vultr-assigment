@@ -1,0 +1,36 @@
+name: postgres
+namespace: databases
+
+image:
+  repository: postgres
+  tag: "16.6-alpine"
+  pullPolicy: IfNotPresent
+
+auth:
+  existingSecret: postgres-auth
+  username: app
+  database: appdb
+  passwordKey: password
+
+persistence:
+  size: 10Gi
+  storageClass: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+podSecurityContext:
+  fsGroup: 70
+
+containerSecurityContext:
+  runAsUser: 70
+  runAsGroup: 70
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]

@@ -1,0 +1,20 @@
+# Kubernetes Gateway API CRDs are applied by scripts/bootstrap.sh from the
+# Istio-documented release (experimental-install includes the CRDs Istio needs).
+# Pin: https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.0/experimental-install.yaml
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: public-gateway
+  namespace: gateway
+  labels:
+    project: cloud-native-platform
+spec:
+  gatewayClassName: istio
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All

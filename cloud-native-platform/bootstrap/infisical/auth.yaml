@@ -1,0 +1,13 @@
+apiVersion: secrets.infisical.com/v1beta1
+kind: InfisicalAuth
+metadata:
+  name: infisical-universal-auth
+  namespace: infisical-system
+spec:
+  infisicalConnectionRef:
+    name: infisical-cloud
+    namespace: infisical-system
+  universalAuth:
+    credentialsRef:
+      secretName: infisical-universal-auth
+      secretNamespace: infisical-system
