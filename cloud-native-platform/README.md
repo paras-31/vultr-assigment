@@ -58,3 +58,12 @@ Do not apply the infrastructure stack until bootstrap has succeeded and `backend
 ## What comes next
 
 Phase 1 will bootstrap Istio Ambient, Gateway API, databases, monitoring, and Infisical on the cluster created here. Do not start Phase 1 until `kubectl get nodes` shows three Ready workers on Kubernetes 1.36.x.
+
+## Phase 2: app deployment
+
+The application code and Helm deployment files are now imported into this workspace and adapted for the Vultr cluster:
+
+- App repo: `../AI-Speaking-3TIER-CODE`
+- Helm repo: `../AI-helm-deployment`
+
+The app repo builds multi-arch images for `registry.vultr.com/ai-speaking/*`, and the Helm chart in `AI-helm-deployment/ai-eks` now points to the Vultr registry and the project Gateway API route (`public-gateway`). This keeps the deployment aligned with the bootstrap in `cloud-native-platform/bootstrap/gateway-api/`.
